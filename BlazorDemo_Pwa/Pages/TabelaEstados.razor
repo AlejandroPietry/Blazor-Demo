@@ -1,0 +1,59 @@
+﻿@inject HttpClient Http
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr class="mt-5 m-1 pl-3 pr-3">
+                <th scope="col">
+                    <h6 class="item-uppercase item-bold text-center">estado</h6>
+                </th>
+                <th scope="col">
+                    <h6 class="item-uppercase item-bold text-center">casos</h6>
+                </th>
+                <th scope="col">
+                    <h6 class="item-uppercase item-bold text-center">óbitos</h6>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dadoEstado in dadosEstados)
+            {
+                <tr>
+                    <td>
+                        <h6 class="item-uppercase item-bold text-center">
+                            @dadoEstado.nome
+                        </h6>
+                    </td>
+                    <td>
+                        <h6 class="item-uppercase item-bold text-center">
+                            @dadoEstado.casosAcumulado
+                        </h6>
+                    </td>
+                    <td class="largura-30">
+                        <h6 class="item-uppercase item-bold text-center">
+                            @dadoEstado.obitosAcumulado
+                        </h6>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@code {
+
+    List<DadosEstadoApiResponse> dadosEstados;
+    protected override async Task OnInitializedAsync()
+    {
+        dadosEstados = await Http.GetFromJsonAsync<List<DadosEstadoApiResponse>>(@"https://xx9p7hp1p7.execute-api.us-east-1.amazonaws.com/prod/PortalEstado");
+    }
+    public class DadosEstadoApiResponse
+    {
+        public string _id { get; set; }
+        public string nome { get; set; }
+        public int casosAcumulado { get; set; }
+        public int obitosAcumulado { get; set; }
+        public string populacaoTCU2019 { get; set; }
+        public string incidencia { get; set; }
+        public string incidenciaObito { get; set; }
+    }
+}
